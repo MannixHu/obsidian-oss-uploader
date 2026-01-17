@@ -1,0 +1,9 @@
+{
+	"id": "oss-uploader",
+	"name": "OSS Uploader",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Upload local attachments to Aliyun OSS and replace links automatically",
+	"author": "Mannix",
+	"isDesktopOnly": false
+}
