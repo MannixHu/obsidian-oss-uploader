@@ -28,7 +28,7 @@ An Obsidian plugin that uploads local attachments to Aliyun OSS and automaticall
 
 ```bash
 # Clone the repository
-git clone https://github.com/anthropics/obsidian-oss-uploader.git
+git clone https://github.com/MannixHu/obsidian-oss-uploader.git
 
 # Install dependencies
 npm install
