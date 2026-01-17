@@ -501,6 +501,7 @@ export default class OSSUploaderPlugin extends Plugin {
 
 	/**
 	 * Move unreferenced files to archive folder
+	 * Handle naming conflicts by appending -1, -2, etc.
 	 */
 	async moveToArchive(files: TFile[], archiveFolder: string): Promise<void> {
 		// Ensure archive folder exists
@@ -510,9 +511,23 @@ export default class OSSUploaderPlugin extends Plugin {
 		}
 
 		for (const file of files) {
-			const newPath = `${archiveFolder}/${file.name}`;
+			let newPath = `${archiveFolder}/${file.name}`;
+			let counter = 1;
+
+			// Check if file already exists and generate new name if needed
+			while (this.app.vault.getAbstractFileByPath(newPath)) {
+				const nameParts = file.name.split(".");
+				const ext = nameParts.pop() || "";
+				const baseName = nameParts.join(".");
+				newPath = `${archiveFolder}/${baseName}-${counter}.${ext}`;
+				counter++;
+			}
+
 			try {
 				await this.app.vault.rename(file, newPath);
+				if (newPath !== `${archiveFolder}/${file.name}`) {
+					console.log(`[OSS Uploader] Renamed to avoid conflict: ${file.name} → ${newPath.split("/").pop()}`);
+				}
 			} catch (e) {
 				console.error(`[OSS Uploader] Failed to move ${file.path} to archive:`, e);
 			}
